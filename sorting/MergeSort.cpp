@@ -1,18 +1,19 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <random>
 
-void Merge(std::vector<int>& input, std::vector<int>& aux, int &lo,  int& mid, int& end) {
+void Merge(std::vector<int>& input, int &lo,  int& mid, int& hi) {
+    int aux_sz = hi - lo + 1;
+    std::vector<int> aux(aux_sz);
+    std::copy(input.begin() + lo, input.begin() + hi + 1, aux.begin());
+    int idx1 = 0;
+    int idx2 = mid + 1 - lo;
 
-    int idx1 = lo;
-    int idx2 = mid + 1;
-
-    std::copy(input.begin() + lo, input.begin() + end + 1, aux.begin() + lo);
-
-    for (int i = lo; i <= end; ++i) {
-        if (idx1 > mid) {
+    for (int i = lo; i <= hi; ++i) {
+        if (idx1 > mid - lo) {
             input[i] = aux[idx2++];
-        } else if (idx2 > end) {
+        } else if (idx2 > hi - lo) {
             input[i] = aux[idx1++];
         }
         else {
@@ -25,7 +26,7 @@ void Merge(std::vector<int>& input, std::vector<int>& aux, int &lo,  int& mid, i
     }
 }
 
-void Sort (std::vector<int>& input, std::vector<int>& aux, int lo, int hi) {
+void Sort (std::vector<int>& input, int lo, int hi) {
     if (lo >= hi) {
         return;
     }
@@ -33,21 +34,28 @@ void Sort (std::vector<int>& input, std::vector<int>& aux, int lo, int hi) {
     int end = hi;
     int mid = lo + (hi - lo) / 2;
 
-    Sort(input, aux, begin, mid);
-    Sort(input, aux, mid + 1, end);
-    Merge(input, aux, begin, mid, end);
+    Sort(input, begin, mid);
+    Sort(input, mid + 1, end);
+    Merge(input, begin, mid, end);
 
 }
 
 int main (int argc, const char * argv[]) {
-    std::vector<int> list1 = {7, 5, 16, 8, 1, 5};
-    //std::vector<int> list1 = {4,3,2,1};
-    std::vector<int> aux(list1.size());
-    Sort(list1, aux, 0, list1.size() - 1);
-
-    for (auto& x : list1) {
-        std::cout << x << std::endl;
+    u_int input_sz = 1000;
+    std::vector<int> input(input_sz);
+    
+    
+    /* generating a vector with random number range(0,input_sz) */
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0,input_sz);
+    for (size_t i = 0; i < input_sz; ++i) {
+        input[i] = dist(rng);
     }
+    
+    Sort(input, 0, input.size() - 1);
+
+    assert(std::is_sorted(input.begin(), input.end()));
 
     return 0;
 }
