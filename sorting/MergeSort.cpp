@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 
+/* The helper function for MergeSortTD */
 void Merge(std::vector<int>& input, int &lo,  int& mid, int& hi) {
     int aux_sz = hi - lo + 1;
     std::vector<int> aux(aux_sz);
@@ -26,7 +27,8 @@ void Merge(std::vector<int>& input, int &lo,  int& mid, int& hi) {
     }
 }
 
-void Sort (std::vector<int>& input, int lo, int hi) {
+/* Merge sort Top-Down */
+void MergeSortTD (std::vector<int>& input, int lo, int hi) {
     if (lo >= hi) {
         return;
     }
@@ -34,11 +36,49 @@ void Sort (std::vector<int>& input, int lo, int hi) {
     int end = hi;
     int mid = lo + (hi - lo) / 2;
 
-    Sort(input, begin, mid);
-    Sort(input, mid + 1, end);
+    MergeSortTD(input, begin, mid);
+    MergeSortTD(input, mid + 1, end);
     Merge(input, begin, mid, end);
 
 }
+
+/* Merge sort Bottom-Up */ 
+void MergeSortBU (std::vector<int>& input) {
+    int len = input.size();
+
+    for (int sz = 2; sz < len * 2; sz *= 2) {
+        std::vector<int> aux(sz);    // aux vector for temporary copy
+        for (int i = 0; i < ceil(len / sz); ++i) {
+            /* for input */
+            int lo = i * sz;
+            int hi = lo + sz - 1;
+            int mid = lo + (hi - lo) / 2;
+            /* for aux */
+            int idx1 = 0;
+            int idx2 = mid + 1 - lo;
+
+            std::copy(input.begin() + lo, input.begin() + hi + 1, aux.begin());
+
+            for (int k = lo; k <= hi; ++k) {
+                if (idx1 > mid - lo) {
+                    input[k] = aux[idx2++];
+                } else if (idx2 > hi - lo) {
+                    input[k] = aux[idx1++];
+                } else {
+                    if (aux[idx1] < aux[idx2]) {
+                        input[k] = aux[idx1++];
+                    } else {
+                        input[k] = aux[idx2++];
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
 
 int main (int argc, const char * argv[]) {
     u_int input_sz = 1000;
@@ -53,9 +93,15 @@ int main (int argc, const char * argv[]) {
         input[i] = dist(rng);
     }
     
-    Sort(input, 0, input.size() - 1);
 
-    assert(std::is_sorted(input.begin(), input.end()));
+    std::vector<int> test({3,2,1});
+    //MergeSortTD(input, 0, input.size() - 1);
+    MergeSortBU(test);
+
+    for (int& x : test)
+        std::cout << "-->" << x << std::endl;
+
+    //assert(std::is_sorted(input.begin(), input.end()));
 
     return 0;
 }
