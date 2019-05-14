@@ -47,27 +47,19 @@ void MergeSortBU (std::vector<int>& input) {
     int len = input.size();
 
     for (int sz = 2; sz < len * 2; sz *= 2) {
-        // std::cout << "sz--> " << sz << std::endl;
-        //std::cout << ceil((double)len / (double)sz) << std::endl;
         for (int i = 0; i < (int)ceil((double)len / (double)sz); ++i) {
-            //std::cout << i << std::endl;
             /* for input */
             int lo = i * sz;
             int hi = std::min(len - 1, lo + sz - 1);
             int mid = lo + ((lo + sz - 1) - lo) / 2;
-            //std::cout << mid << std::endl;
 
             std::vector<int> aux(hi - lo + 1);    // aux vector for temporary copy
             /* for aux */
             int idx1 = 0;
             int idx2 = sz / 2;
             std::copy(input.begin() + lo, input.begin() + hi + 1, aux.begin());
-            //std::cout << aux.size() << std::endl;
-            // for (int&x : aux) {
-            //     std::cout << "aux" << x << std::endl;
-            // }
+
             for (int k = lo; k <= hi; ++k) {
-                //std::cout << idx1 << idx2<< std::endl;
                 if (idx1 > mid - lo) {
                     input[k] = aux[idx2++];
                 } else if (idx2 > hi - lo) {
@@ -81,9 +73,6 @@ void MergeSortBU (std::vector<int>& input) {
                 }
             }
         }
-    //    for (int& x : input) {
-    //        std::cout << x << std::endl;
-    //    } 
     }
 }
 
@@ -106,12 +95,8 @@ int main (int argc, const char * argv[]) {
     }
     
 
-    std::vector<int> test({8,5,2,7,9});
-    MergeSortTD(input, 0, input.size() - 1);
-    //MergeSortBU(input);
-
-    // for (int& x : test)
-    //     std::cout << "-->" << x << std::endl;
+    //MergeSortTD(input, 0, input.size() - 1);
+    MergeSortBU(input);
 
     assert(std::is_sorted(input.begin(), input.end()));
 
