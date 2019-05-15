@@ -16,6 +16,6 @@ clean:
 	rm -f MergeSort QuickSort
 
 new:
-	make clean MergeSort
+	make clean MergeSort QuickSort
 
 
