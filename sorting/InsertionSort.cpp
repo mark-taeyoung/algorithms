@@ -35,14 +35,6 @@ int main (int argc, const char * argv[]) {
     
     InsertionSort(input);
 
-    // std::vector<int> test = {10,7,8,9,1,5};
-    // InsertionSort(test);
-    // for (int&x : test) {
-    //     std::cout << x << std::endl;
-    // }
-
-
-
     assert(std::is_sorted(input.begin(), input.end()));
 
     return 0;

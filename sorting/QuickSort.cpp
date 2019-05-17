@@ -59,14 +59,6 @@ int main (int argc, const char * argv[]) {
     
     QuickSort(input);
 
-    // std::vector<int> test = {10,7,8,9,1,5};
-    // QuickSort(test);
-    // for (int&x : test) {
-    //     std::cout << x << std::endl;
-    // }
-
-
-
     assert(std::is_sorted(input.begin(), input.end()));
 
     return 0;
